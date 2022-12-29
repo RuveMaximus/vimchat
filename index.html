@@ -15,7 +15,9 @@
     <button id="goToChat">Connect</button>
     </br>
     <footer>
-        <input id="messageText" type="text" placeholder="Enter message...">
+        <div class="input-message-block">
+            <input id="messageText" type="text" placeholder="Enter message...">
+        </div>
         <!-- <button id="sendBtn">Send</button> -->
         <div id="statusBar">
             <div class="mode">---command---</div>
@@ -39,7 +41,7 @@
 
         function pushMessageToHistory(message) {
             let messageBlock = document.createElement('div');
-            messageBlock.textContent = message.from + ": " + message.message.text;
+            messageBlock.innerHTML = `<span class="text-brown">${message.from}</span>: ${message.message.text}`;
             document.body.append(messageBlock);
         }
 

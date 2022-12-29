@@ -1,8 +1,18 @@
+:root {
+    --color-blue: #33d9d9;
+    --color-brown: #a98705;
+}
+
 body {
     padding: 0;
+    background-color: #300a24;
+    color: #fff;
     margin: 0;
     font-family: 'Courier New', Courier, monospace;
 }
+
+.text-brown { color: var(--color-brown); }
+.text-blue { color: var(--color-blue); }
 
 footer {
     position: fixed;
@@ -12,6 +22,26 @@ footer {
 
 input#messageText {
     width: 100%;
+    left: 20px;
+    position: relative;
+    caret-color: white;
+    background-color: transparent;
+    font-weight: bold;
+    color: var(--color-blue);
+    border: none;
+    outline: none;
+}
+.input-message-block {
+    position: relative;
+}
+.input-message-block::before {
+    width: 10px;
+    height: 10px;
+    content: ">";
+    position: absolute;
+    font-weight: 700;
+    left: 0;
+    color: var(--color-blue);
 }
 
 #statusBar {
