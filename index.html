@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VC</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <input id="chatId" type="text" placeholder="chatId">
+    <button id="goToChat">Connect</button>
+    </br>
+    <footer>
+        <input id="messageText" type="text" placeholder="Enter message...">
+        <!-- <button id="sendBtn">Send</button> -->
+        <div id="statusBar">
+            <div class="mode">---command---</div>
+            <div class="chat"></div>
+            <input type="text" id="commandMode">
+        </div>
+    </footer>
+
+    <script type="module">
+        import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+        const socket = io();
+        let chatId = "";
+
+        socket.on("connect", () => { console.log('connected') })
+        socket.on("receive_message", message => pushMessageToHistory(message));
+        socket.on("connected_to_chat", member => {
+            let messageBlock = document.createElement('div');
+            messageBlock.textContent = member;
+            document.body.append(messageBlock);
+        })
+
+        function pushMessageToHistory(message) {
+            let messageBlock = document.createElement('div');
+            messageBlock.textContent = message.from + ": " + message.message.text;
+            document.body.append(messageBlock);
+        }
+
+        document.getElementById('goToChat').addEventListener('click', joinRoom);
+        // document.getElementById('sendBtn').addEventListener('click', send_message);
+        function send_message() {
+            const messageText = document.getElementById('messageText');
+            socket.emit("send_message", { text: messageText.value, chat: chatId })
+            messageText.value = "";
+        }
+
+        function joinRoom() {
+            const room = document.getElementById('chatId').value;
+            const roomList = document.getElementById('statusBar').querySelector('.chat');
+            socket.emit('connect_to_chat', room, response => console.log(response))
+
+            if (!roomList.textContent.includes(room)) roomList.textContent += ' ' + room;
+            chatId = room;
+        }
+
+        document.getElementById('messageText').addEventListener('keyup', event => {
+            if (event.key === 'Enter') { send_message(); }
+        });
+    </script>
+    <script src="/static/interface.js"></script>
+</body>
+
+</html>
